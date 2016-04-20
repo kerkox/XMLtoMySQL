@@ -24,6 +24,8 @@ public class Ventana extends javax.swing.JFrame {
     Ventana ventana = this;
     public Ventana() {
         initComponents();
+        fileSelect.addActionListener(new ListenerExaminar());
+        ButtonConvert.addActionListener(new ListnerConvertir());
     }
     
 
@@ -41,6 +43,7 @@ public class Ventana extends javax.swing.JFrame {
         fileSelect = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        ButtonConvert = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,6 +58,8 @@ public class Ventana extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("XML to MySQL");
+
+        ButtonConvert.setText("Convertir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,7 +77,10 @@ public class Ventana extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rutaFile)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ButtonConvert)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,7 +93,9 @@ public class Ventana extends javax.swing.JFrame {
                 .addComponent(rutaFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonConvert)
+                .addContainerGap(236, Short.MAX_VALUE))
         );
 
         pack();
@@ -93,6 +103,7 @@ public class Ventana extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonConvert;
     private javax.swing.JFileChooser SeleccionFichero;
     private javax.swing.JButton fileSelect;
     private javax.swing.JLabel jLabel1;
@@ -107,7 +118,20 @@ public class ListenerExaminar implements ActionListener{
             SeleccionFichero.showOpenDialog(ventana);
             File xmlFile = SeleccionFichero.getSelectedFile();
             fichero = new XML(xmlFile);
+            rutaFile.setText(xmlFile.getAbsolutePath());
             
+                      
+            
+        }
+    
+}
+
+
+public class ListnerConvertir implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+           fichero.cargarXML();
         }
     
 }

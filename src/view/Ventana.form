@@ -44,6 +44,10 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="ButtonConvert" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
       </Group>
@@ -59,7 +63,9 @@
               <Component id="rutaFile" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="fileSelect" min="-2" pref="32" max="-2" attributes="0"/>
-              <EmptySpace pref="270" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="ButtonConvert" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="236" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -93,6 +99,11 @@
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="XML to MySQL"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="ButtonConvert">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Convertir"/>
       </Properties>
     </Component>
   </SubComponents>
