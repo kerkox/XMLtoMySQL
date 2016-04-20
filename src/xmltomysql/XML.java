@@ -25,41 +25,40 @@ public class XML {
         System.out.println("Comenzo a cargar el archivo XML");
         SAXBuilder builder = new SAXBuilder();
 //        File xmlFile = new File("archivo.xml");
+File salida = new File("/home/paulker/SQL/Salida.txt");
         try {
             System.out.println("Entro a comprobar algo");
             Document document = (Document) builder.build(xmlFile);
 
             Element rootNode = document.getRootElement();
             
-//<ID>1</ID>
-//<CODIGO>145860</CODIGO>
-//<CODIGOP>200145860</CODIGOP>
-//<PLAN>2711</PLAN>
-//<APELLIDOS>TOVAR ROJAS</APELLIDOS>
-//<NOMBRES>WILFRED</NOMBRES>
-//<CEDULA>C.C. 14700218</CEDULA>
-//<DIRECCION>CRA 14 # 13A-21</DIRECCION>
-//<TELEFONO>922675757</TELEFONO>
-//<CELULAR>-</CELULAR>
-//<CORREO>wilfred.tovar@correounivalle.edu.co</CORREO>
             List list = rootNode.getChildren("UnivalleBD");
             System.out.println("Tamaño list: "+ list.size());
-            for (int i = 0; i < list.size(); i++) {
-                Element tabla = (Element) list.get(i);
+            Element tabla = (Element) list.get(0);
                 String nombreTabla = tabla.getName();
                 System.out.println("Tabla: " + nombreTabla);
+                
                 List lista_campos = tabla.getChildren();
                 String campos="";
-                String datos="";
                 for (int j = 0; j < lista_campos.size(); j++) {
-
                     Element campo = (Element) lista_campos.get(j);
                     campos+=campo.getName()+"\t";
+                
+                }
+                System.out.println(campos);
+                
+            for (int i = 0; i < list.size(); i++) {
+                tabla = (Element) list.get(i);
+                lista_campos = tabla.getChildren();
+                String datos="";
+                for (int j = 0; j < lista_campos.size(); j++) {
+                    Element campo = (Element) lista_campos.get(j);
                     datos+=campo.getValue()+"\t";
 
                 }
-                System.out.println(campos);
+
                 System.out.println(datos);
+                
             }
         } catch (IOException io) {
             System.out.println(io.getMessage());
@@ -69,6 +68,11 @@ public class XML {
             System.out.println("Un error de JDOMException");
         }
 
+    }
+    
+    public void escribir(String data){
+        //Aqui escribimos el codigo para insertar un registro y este se convierte
+//        en el codigo necesario para sql
     }
 
 }
