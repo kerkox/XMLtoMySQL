@@ -1,6 +1,9 @@
 package xmltomysql;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import org.jdom2.Document;
@@ -15,18 +18,31 @@ import org.jdom2.input.SAXBuilder;
 public class XML {
     
     private File xmlFile; 
+    private File salida;
+    private FileOutputStream fout;
+    private BufferedOutputStream bout;
 
     public XML(File xmlFile) {
         this.xmlFile = xmlFile;
     }
 
+public void loadSalida() throws FileNotFoundException{
+    salida = new File("/home/paulker/SQL/Salida.txt");
+    fout = new FileOutputStream(salida);
+    bout = new BufferedOutputStream(fout);
     
+    //Aqui va la estructura basica del codigo a convertir en SQL
+    String datasBasicos ="";
+    
+}    
     public void cargarXML() {
         System.out.println("Comenzo a cargar el archivo XML");
         SAXBuilder builder = new SAXBuilder();
 //        File xmlFile = new File("archivo.xml");
-File salida = new File("/home/paulker/SQL/Salida.txt");
+//Este valor es de prueba        
+
         try {
+            loadSalida();
             System.out.println("Entro a comprobar algo");
             Document document = (Document) builder.build(xmlFile);
 
