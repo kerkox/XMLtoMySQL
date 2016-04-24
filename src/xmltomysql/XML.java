@@ -32,7 +32,8 @@ public class XML {
     }
 
     public void loadSalida() throws FileNotFoundException {
-        salida = new File("/home/paulker/SQL/Salida.txt");
+        String ruta = xmlFile.getAbsolutePath();
+        salida = new File(ruta+"Salida.txt");
         fout = new FileOutputStream(salida);
         bout = new BufferedOutputStream(fout);
 
@@ -180,12 +181,13 @@ public class XML {
                 //##############################################
                 //Corregir para evaluar cuando son varchar o int
                 for (int x = 0; x < datos.length; x++) {
-                    if (x == 10) {
-                        datas += "'" + datos[x] + "'";
-                    } else if (x == 4 || x == 5 || x == 7 || x == 8 || x == 9) {
-                        datas += "'" + datos[x] + "'" + ",";
-                    } else {
-                        datas += datos[x] + ",";
+                    if (x == datos.length-1) {
+                        datas += "-"+x + "#!" + datos[x] + "-"+ x +"#!"; 
+                // Eso me permite en un futuro poder cambiar los simbolos #!
+                // que estan acompañados de un Numero que es el indice 
+                // por el correspondiente caracter
+                    }  else {
+                        datas += "-"+x + "#!" + datos[x] + "-"+x + "#!"+",";
                     }
 
                 }
@@ -200,6 +202,8 @@ public class XML {
 
             getCampoSize(camposSize);
             getCamposType(camposTiposSQL);
+            UpdateCharsSQL();
+            
 
             LoadSQL(nombreTabla, camposNames, camposTiposSQL);
             System.out.println(sql);
@@ -212,6 +216,25 @@ public class XML {
         }
 
     }
+    
+    
+    public void UpdateCharsSQL(){
+        
+        for(int x=0; x<camposTipo.length;x++){
+            String charUpdate = "-"+x+"#!";
+            switch(camposTipo[x]){
+                case 1:
+                    values = values.replace(charUpdate, "");
+                    break;
+                case 2:
+                    values = values.replace(charUpdate, "'");
+                    break;
+                
+            }
+        }
+        
+    }
+            
 
     public void escribir(String data) {
 
