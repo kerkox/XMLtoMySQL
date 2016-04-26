@@ -53,7 +53,7 @@ public class Ventana extends javax.swing.JFrame {
         fileSelect.setText("Examinar..");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Seleciona el archivo a Encryptar");
+        jLabel2.setText("Seleciona el archivo a Convertir");
 
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

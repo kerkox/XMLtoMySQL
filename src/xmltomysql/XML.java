@@ -4,8 +4,14 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import jdk.jfr.events.FileWriteEvent;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -33,7 +39,7 @@ public class XML {
 
     public void loadSalida() throws FileNotFoundException {
         String ruta = xmlFile.getAbsolutePath();
-        salida = new File(ruta+"Salida.txt");
+        salida = new File(ruta + "Salida.txt");
         fout = new FileOutputStream(salida);
         bout = new BufferedOutputStream(fout);
 
@@ -79,7 +85,7 @@ public class XML {
                     type = 1;
                     break;
                 }
-                if (y == numbers.length-1) {
+                if (y == numbers.length - 1) {
                     type = 2;
                     break;
                 }
@@ -115,7 +121,7 @@ public class XML {
 //Este valor es de prueba        
 
         try {
-            loadSalida();
+//            loadSalida();
             System.out.println("Entro a comprobar algo");
             Document document = (Document) builder.build(xmlFile);
 
@@ -167,27 +173,19 @@ public class XML {
                  * numero (longitud auto) +Pasar manualmente los tipos
                  * detallando longitud
                  */
-                //Cambio especifico-----------------------------
-//                datos[6] = datos[6].substring(5, datos[6].length());
-//                datos[6] = datos[6].replace("C.C. ", "");
                 String datas = ",(";
                 if (i == 0) {
                     datas = "(";
                 }
-                
-                //##############################################
-                //##############################################
-                //##############################################
-                //##############################################
-                //Corregir para evaluar cuando son varchar o int
+
                 for (int x = 0; x < datos.length; x++) {
-                    if (x == datos.length-1) {
-                        datas += "-"+x + "#!" + datos[x] + "-"+ x +"#!"; 
-                // Eso me permite en un futuro poder cambiar los simbolos #!
-                // que estan acompañados de un Numero que es el indice 
-                // por el correspondiente caracter
-                    }  else {
-                        datas += "-"+x + "#!" + datos[x] + "-"+x + "#!"+",";
+                    if (x == datos.length - 1) {
+                        datas += "-" + x + "#!" + datos[x] + "-" + x + "#!";
+                        // Eso me permite en un futuro poder cambiar los simbolos #!
+                        // que estan acompañados de un Numero que es el indice 
+                        // por el correspondiente caracter
+                    } else {
+                        datas += "-" + x + "#!" + datos[x] + "-" + x + "#!" + ",";
                     }
 
                 }
@@ -203,10 +201,15 @@ public class XML {
             getCampoSize(camposSize);
             getCamposType(camposTiposSQL);
             UpdateCharsSQL();
-            
 
             LoadSQL(nombreTabla, camposNames, camposTiposSQL);
-            System.out.println(sql);
+            if(escribir(sql)){
+                JOptionPane.showMessageDialog(null, "Se logro escribir Satisfactoriamente");
+            }else{
+                JOptionPane.showMessageDialog(null, "Hubo algun ERROR al escribir ");
+            }
+            
+//            System.out.println(sql);
         } catch (IOException io) {
             System.out.println(io.getMessage());
             System.out.println("Un error de IOException");
@@ -216,28 +219,48 @@ public class XML {
         }
 
     }
-    
-    
-    public void UpdateCharsSQL(){
-        
-        for(int x=0; x<camposTipo.length;x++){
-            String charUpdate = "-"+x+"#!";
-            switch(camposTipo[x]){
+
+    public void UpdateCharsSQL() {
+
+        for (int x = 0; x < camposTipo.length; x++) {
+            String charUpdate = "-" + x + "#!";
+            switch (camposTipo[x]) {
                 case 1:
                     values = values.replace(charUpdate, "");
                     break;
                 case 2:
                     values = values.replace(charUpdate, "'");
                     break;
-                
+
+            }
+        }
+
+    }
+
+    public boolean escribir(String data) {
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        boolean succes=true;
+        try {
+            fichero = new FileWriter(xmlFile.getParent() + "/resultado.sql");
+            pw = new PrintWriter(fichero);
+            pw.println(sql);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            succes=false;
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
         
-    }
-            
-
-    public void escribir(String data) {
-
+        return succes;
     }
 
     /**
@@ -255,16 +278,20 @@ public class XML {
                 + "CREATE TABLE `" + TablaName + "` (\n";
 
         for (int x = 0; x < camposName.length; x++) {
-            sql += " '" + camposName[x] + "' " + camposType[x] + " NOT NULL,\n";
+            if (x == camposName.length - 1) {
+                sql += " `" + camposName[x] + "` " + camposType[x] + " NOT NULL )\n";
+            } else {
+                sql += " `" + camposName[x] + "` " + camposType[x] + " NOT NULL,\n";
+            }
         }
-        sql += ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;\n\n\n\n";
-        sql += "INSERT INTO '" + TablaName + "' (";
+        sql += "ENGINE = InnoDB CHARSET=utf8 COLLATE=utf8_spanish_ci;\n\n\n\n";
+        sql += "INSERT INTO `" + TablaName + "` (";
         for (int x = 0; x < camposName.length; x++) {
             if (x == camposName.length - 1) {
-                sql += "'" + camposName[x] + "'";
+                sql += "`" + camposName[x] + "`";
                 //para el ultimo dato no quede con una ","
             } else {
-                sql += "'" + camposName[x] + "', ";
+                sql += "`" + camposName[x] + "`, ";
             }
         }
         sql += ") VALUES\n" + values;
