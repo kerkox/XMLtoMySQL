@@ -1,7 +1,6 @@
 
 package xmltomysql;
 
-import java.io.File;
 import view.Ventana;
 
 /**
